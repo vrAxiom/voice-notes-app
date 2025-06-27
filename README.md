@@ -18,6 +18,7 @@ Using the Voice Notes App is designed to be as straightforward as possible:
 3.  **Save Note:** Once you've stopped recording, you can click the "Save Note" button to store your transcribed note. You can also add a title and manually edit the content before saving.
 4.  **Privacy:** Your notes are stored exclusively in your browser's local storage. This means your data remains entirely on your device, ensuring complete privacy and security. Nothing is ever uploaded to a server.
 5.  **Export/Import:** To back up your notes or transfer them to another browser/device, use the "Export All" button. To restore notes, use the "Import" button and select your exported CSV file.
+6.  **Install as a Local App (PWA):** For quick access and a native-like experience, you can install this web application directly to your desktop or mobile device. This allows you to launch it like a regular application, pin it to your taskbar/dock, and even set it to start on system startup (depending on your operating system and browser settings). Look for an "Install App" or "Add to Home Screen" option in your browser's menu (often found in the address bar or settings menu).
 
 ## Deployment
 
