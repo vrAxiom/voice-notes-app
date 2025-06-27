@@ -3,6 +3,18 @@ import { setupSpeechRecognition, stopRecording, setShouldSaveAfterStop, getIsRec
 import { renderNotes, handleSaveNote, handleExportAll, handleImport, checkSharedNote } from './modules/note.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Handle the disclaimer alert
+    const disclaimerAlert = document.querySelector('.alert-warning');
+    const DISCLAIMER_STORAGE_KEY = 'voiceNotesDisclaimerDismissed';
+
+    if (localStorage.getItem(DISCLAIMER_STORAGE_KEY) === 'true') {
+        disclaimerAlert.style.display = 'none';
+    }
+
+    disclaimerAlert.addEventListener('closed.bs.alert', function () {
+        localStorage.setItem(DISCLAIMER_STORAGE_KEY, 'true');
+    });
+
     setupSpeechRecognition();
     renderNotes();
     checkSharedNote();
