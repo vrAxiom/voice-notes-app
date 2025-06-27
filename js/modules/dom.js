@@ -1,0 +1,9 @@
+export const noteTitle = document.getElementById('note-title');
+export const noteContent = document.getElementById('note-content');
+export const micBtn = document.getElementById('mic-btn');
+export const saveBtn = document.getElementById('save-btn');
+export const exportAllBtn = document.getElementById('export-all-btn');
+export const importBtn = document.getElementById('import-btn');
+export const importFile = document.getElementById('import-file');
+export const notesList = document.getElementById('notes-list');
+export const searchBar = document.getElementById('search-bar');
