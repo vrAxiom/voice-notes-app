@@ -15,7 +15,7 @@ function saveNote(note) {
     saveNotes(notes);
 }
 
-function createNoteElement(note, index) {
+function createNoteElement(note) {
     const noteDiv = document.createElement('div');
     noteDiv.classList.add('note');
 
@@ -39,7 +39,7 @@ function createNoteElement(note, index) {
     deleteBtn.title = 'Delete';
     deleteBtn.addEventListener('click', () => {
         if (confirm('Are you sure you want to delete this note?')) {
-            deleteNote(index);
+            deleteNoteByTimestamp(note.timestamp);
             renderNotes();
         }
     });
@@ -81,10 +81,13 @@ function createNoteElement(note, index) {
     return noteDiv;
 }
 
-function deleteNote(index) {
+function deleteNoteByTimestamp(timestamp) {
     const notes = getNotes();
-    notes.splice(index, 1);
-    saveNotes(notes);
+    const index = notes.findIndex(note => note.timestamp === timestamp);
+    if (index !== -1) {
+        notes.splice(index, 1);
+        saveNotes(notes);
+    }
 }
 
 function shareNote(note) {
@@ -138,8 +141,8 @@ export function renderNotes(searchTerm = '') {
         );
     }
     notes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    notes.forEach((note, index) => {
-        const noteElement = createNoteElement(note, index);
+    notes.forEach((note) => {
+        const noteElement = createNoteElement(note);
         notesList.appendChild(noteElement);
     });
 }
