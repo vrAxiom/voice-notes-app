@@ -25,7 +25,78 @@ function createNoteElement(note) {
 
     const content = document.createElement('p');
     content.classList.add('note-content');
-    content.textContent = note.content;
+    // Enhanced Read More functionality
+    const maxPreviewLength = 250;
+    const maxPreviewLines = 5;
+    let lines = note.content.split('\n');
+    let needsReadMore = note.content.length > maxPreviewLength || lines.length > maxPreviewLines;
+
+    // Detect visual overflow using a hidden clone and line clamp math
+    const tempDiv = document.createElement('div');
+    tempDiv.style.position = 'absolute';
+    tempDiv.style.visibility = 'hidden';
+    tempDiv.style.overflow = 'visible';
+    tempDiv.style.width = '320px'; // Approx note card width
+    tempDiv.style.font = 'inherit';
+    tempDiv.style.whiteSpace = 'pre-wrap';
+    tempDiv.style.lineHeight = 'inherit';
+    tempDiv.style.padding = '15px';
+    tempDiv.className = 'note-content';
+    tempDiv.textContent = note.content;
+    document.body.appendChild(tempDiv);
+    const computed = window.getComputedStyle(tempDiv);
+    const lineClamp = parseInt(computed.webkitLineClamp || computed.lineClamp || 5);
+    const lineHeight = parseFloat(computed.lineHeight);
+    const maxLines = isNaN(lineClamp) ? 5 : lineClamp;
+    const maxHeight = lineHeight * maxLines;
+    const actualLines = tempDiv.scrollHeight / lineHeight;
+    if (actualLines > maxLines) {
+        needsReadMore = true;
+    }
+    document.body.removeChild(tempDiv);
+
+    let preview = note.content;
+    if (needsReadMore) {
+        // Show only first N lines or chars, whichever is shorter
+        if (lines.length > maxPreviewLines) {
+            preview = lines.slice(0, maxPreviewLines).join('\n');
+        } else {
+            preview = note.content.slice(0, maxPreviewLength);
+        }
+        content.textContent = preview;
+        content.appendChild(document.createElement('br'));
+        const ellipsis = document.createElement('span');
+        ellipsis.textContent = '...';
+        ellipsis.style.color = '#888';
+        content.appendChild(ellipsis);
+
+        const readMore = document.createElement('span');
+        readMore.className = 'read-more-link';
+        readMore.textContent = 'Read more';
+        readMore.style.color = '#007bff';
+        readMore.style.cursor = 'pointer';
+        readMore.style.display = 'block';
+        readMore.style.marginTop = '8px';
+
+        let expanded = false;
+        readMore.addEventListener('click', () => {
+            expanded = !expanded;
+            if (expanded) {
+                content.textContent = note.content;
+                readMore.textContent = 'Show less';
+                content.appendChild(document.createElement('br'));
+                content.appendChild(readMore);
+            } else {
+                content.textContent = preview;
+                content.appendChild(document.createElement('br'));
+                content.appendChild(ellipsis);
+                content.appendChild(readMore);
+            }
+        });
+        content.appendChild(readMore);
+    } else {
+        content.textContent = note.content;
+    }
 
     const timestamp = document.createElement('p');
     timestamp.classList.add('note-timestamp');
@@ -65,6 +136,14 @@ function createNoteElement(note) {
         copyNoteToClipboard(note);
     });
 
+    // Expand button (always visible)
+    const expandBtn = document.createElement('button');
+    expandBtn.innerHTML = '<i class="fas fa-expand"></i>';
+    expandBtn.title = 'Expand';
+    expandBtn.addEventListener('click', () => {
+        openNoteModal(note);
+    });
+    buttonsDiv.appendChild(expandBtn);
     buttonsDiv.appendChild(deleteBtn);
     buttonsDiv.appendChild(shareBtn);
     buttonsDiv.appendChild(exportBtn);
@@ -190,7 +269,17 @@ export function handleExportAll() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'notes.csv');
+    // Format: notes-YYYYMMDD-HHMMSS.csv
+    const now = new Date();
+    const pad = n => n.toString().padStart(2, '0');
+    const y = now.getFullYear();
+    const m = pad(now.getMonth() + 1);
+    const d = pad(now.getDate());
+    const h = pad(now.getHours());
+    const min = pad(now.getMinutes());
+    const s = pad(now.getSeconds());
+    const filename = `notes-${y}${m}${d}-${h}${min}${s}.csv`;
+    link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
 }

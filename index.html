@@ -42,9 +42,24 @@
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
                 <input type="text" id="search-bar" class="form-control" placeholder="Search notes...">
+                <div class="input-group-append">
+                    <button id="search-clear-btn" class="btn btn-outline-secondary" type="button" style="display:none;" tabindex="-1" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
         </div>
         <div id="notes-list" class="mt-4"></div>
+    </div>
+
+    <!-- Note Modal for full note view -->
+    <div id="note-modal" class="note-modal">
+      <div class="note-modal-content">
+        <button class="note-modal-close" id="note-modal-close" aria-label="Close">&times;</button>
+        <div class="note-modal-title" id="note-modal-title"></div>
+        <div class="note-modal-timestamp" id="note-modal-timestamp"></div>
+        <div class="note-modal-body" id="note-modal-body"></div>
+      </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
