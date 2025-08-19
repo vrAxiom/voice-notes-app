@@ -160,6 +160,59 @@ function createNoteElement(note) {
     return noteDiv;
 }
 
+// -------- Modal (Expand) Logic --------
+function openNoteModal(note) {
+    const modal = document.getElementById('note-modal');
+    const titleEl = document.getElementById('note-modal-title');
+    const tsEl = document.getElementById('note-modal-timestamp');
+    const bodyEl = document.getElementById('note-modal-body');
+    const closeBtn = document.getElementById('note-modal-close');
+    if (!modal || !titleEl || !tsEl || !bodyEl) return; // Modal markup missing
+
+    // Populate
+    titleEl.textContent = note.title;
+    tsEl.textContent = new Date(note.timestamp).toLocaleString();
+    bodyEl.textContent = note.content;
+    bodyEl.scrollTop = 0; // reset scroll for long notes
+
+    // Show
+    modal.classList.add('active');
+
+    // Save last focused element for restoration
+    const lastActive = document.activeElement;
+    modal.dataset.lastFocus = lastActive && lastActive.focus ? 'restore' : '';
+    // Move focus to close button (if exists) for accessibility
+    if (closeBtn) closeBtn.focus();
+
+    // Simple focus trap
+    const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusable = Array.from(modal.querySelectorAll(focusableSelectors)).filter(el => !el.hasAttribute('disabled'));
+    function handleKey(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        } else if (e.key === 'Tab' && focusable.length) {
+            const idx = focusable.indexOf(document.activeElement);
+            if (e.shiftKey && (idx === 0 || idx === -1)) { e.preventDefault(); focusable[focusable.length - 1].focus(); }
+            else if (!e.shiftKey && (idx === focusable.length - 1)) { e.preventDefault(); focusable[0].focus(); }
+        }
+    }
+    function backdropClick(e) { if (e.target === modal) closeModal(); }
+    function closeOnBtn() { closeModal(); }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        modal.removeEventListener('click', backdropClick);
+        document.removeEventListener('keydown', handleKey);
+        if (closeBtn) closeBtn.removeEventListener('click', closeOnBtn);
+        // Restore focus to first note title to maintain context (optional)
+        if (lastActive && lastActive.focus) lastActive.focus();
+    }
+
+    modal.addEventListener('click', backdropClick);
+    document.addEventListener('keydown', handleKey);
+    if (closeBtn) closeBtn.addEventListener('click', closeOnBtn);
+}
+
 function deleteNoteByTimestamp(timestamp) {
     const notes = getNotes();
     const index = notes.findIndex(note => note.timestamp === timestamp);
