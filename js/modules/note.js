@@ -36,7 +36,9 @@ function createNoteElement(note, index) {
     tempDiv.style.position = 'absolute';
     tempDiv.style.visibility = 'hidden';
     tempDiv.style.overflow = 'visible';
-    tempDiv.style.width = '320px'; // Approx note card width
+    // Dynamically determine note card width
+    const noteDivComputed = window.getComputedStyle(noteDiv);
+    tempDiv.style.width = noteDivComputed.width;
     tempDiv.style.font = 'inherit';
     tempDiv.style.whiteSpace = 'pre-wrap';
     tempDiv.style.lineHeight = 'inherit';
