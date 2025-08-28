@@ -68,7 +68,7 @@ body {
     color: #6c757d;
     margin-right: auto; /* Pushes the timestamp to the left */
     white-space: nowrap; /* Prevent text wrapping */
-    min-width: fit-content; /* Ensure it takes minimum necessary width */
+    min-width: max-content; /* Better cross-browser support for minimum necessary width */
 }
 
 .note-footer {
@@ -198,4 +198,9 @@ body {
         max-width: 98vw;
         padding: 12px 4px 8px 4px;
     }
+}
+
+/* Utility classes */
+.hidden {
+    display: none;
 }

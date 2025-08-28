@@ -18,7 +18,7 @@
         </div>
         <div class="d-flex justify-content-between align-items-center mt-5">
             <h1>Voice Notes</h1>
-            <a href="https://github.com/vrAxiom/voice-notes-app" target="_blank" class="btn btn-dark"><i class="fab fa-github"></i> Star on GitHub</a>
+            <a href="https://github.com/vrAxiom/voice-notes-app" target="_blank" rel="noopener" class="btn btn-dark"><i class="fab fa-github"></i> Star on GitHub</a>
         </div>
         <div class="card mt-3">
             <div class="card-body">
@@ -33,7 +33,7 @@
                 <button id="save-btn" class="btn btn-success"><i class="fas fa-save"></i> <span class="button-text">Save Note</span></button>
                 <button id="export-all-btn" class="btn btn-secondary"><i class="fas fa-file-export"></i> <span class="button-text">Export All</span></button>
                 <button id="import-btn" class="btn btn-info"><i class="fas fa-file-import"></i> <span class="button-text">Import</span></button>
-                <input type="file" id="import-file" style="display: none;" accept=".csv">
+                <input type="file" id="import-file" class="hidden" accept=".csv" title="Import notes from CSV file" aria-label="Import notes from CSV file">
             </div>
         </div>
         <div class="form-group mt-4">
@@ -43,7 +43,7 @@
                 </div>
                 <input type="text" id="search-bar" class="form-control" placeholder="Search notes...">
                 <div class="input-group-append">
-                    <button id="search-clear-btn" class="btn btn-outline-secondary" type="button" style="display:none;" tabindex="-1" aria-label="Clear search">
+                    <button id="search-clear-btn" class="btn btn-outline-secondary hidden" type="button" tabindex="-1" aria-label="Clear search">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
